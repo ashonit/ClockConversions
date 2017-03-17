@@ -1,0 +1,142 @@
+<html>
+    <head>
+        <title>Simple Mars Time</title>
+        <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,700,300,400" rel="stylesheet" type="text/css">-->
+
+        <style>
+            body {
+                font-family: "Open Sans", sans-serif;
+                font-weight: 300;
+                color: #222;
+            }
+            h1, h2 {
+                margin: 1.5em 0 0;
+                font-weight: 700;
+            }
+            h1 span, h2 span {
+                font-weight: 300;
+                color: #666;
+                font-size: 70%;
+            }
+            .container {
+                width: 960px;
+                margin: 50px auto;
+                text-align: center;
+            }
+            .clock {
+                background: #F7F7F7;
+                width: 250px;
+                margin: 10px auto;
+                padding: 5px 10px;
+            }
+            .clock h3 {
+                margin: 0;
+                font-weight: 300;
+            }
+            .clock .time {
+                font-size: 180%;
+            }
+            a {
+                color: #222;
+            }
+            .column {
+                float: left;
+                width: 480px;
+            }
+        </style>
+    </head>
+
+    <script>
+        var defaultEpoch = new Date( "1/1/2017 10:30:00" );
+    </script>
+
+    <body>
+        <div class="container">
+            <h1>Simple Mars Time</h1>
+            <p>Adapted from the awesome <i><a href="http://jtauber.github.io/mars-clock/">Mars Clock by James Tauber</i></a></p>
+
+            <!-- TODO: Implement date picker here to change epoch date/time -->
+            <h2>Earth</h2>
+
+            <div class="date-conversion-results">
+                <div>
+                    Epoch: <span class="time epoch custom-datetime"></span>
+                </div>
+                <div>
+                    Current time: <span class="utc-time"></span>
+                </div>
+                <div>
+                    <i>millis</i> = <span class="millis"></span>
+                </div>
+
+                <div class="clock">
+                    <h3>Days Since Epoch</h3>
+                    <span class="time days-since-epoch"></span>
+                </div>
+
+                <h2>Mars Time</h2>
+
+                <div class="clock">
+                    <h3>Mars Days Since Epoch</h3>
+                    <div class="time mars-days"></div>
+                </div>
+
+                <div class="clock">
+                    <h3>Mars Time of Day</h3>
+                    <div class="time mars-time"></div>
+                </div>
+            </div>
+        </div>
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
+        <script src="jquery.min.js"></script>
+        <script>
+            function h_to_hms(h) {
+                var x = h * 3600;
+                var hh = Math.floor(x / 3600);
+                if (hh < 10) hh = "0" + hh;
+                var y = x % 3600;
+                var mm = Math.floor(y / 60);
+                if (mm < 10) mm = "0" + mm;
+                var ss = Math.round(y % 60);
+                if (ss < 10) ss = "0" + ss;
+                return hh + ":" + mm + ":" + ss;
+            }
+            function add_commas(n) {
+                n += "";
+                var x = n.split(".");
+                var x1 = x[0];
+                var x2 = x.length > 1 ? "." + x[1] : "";
+                var rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, "$1" + "," + "$2");
+                }
+                return x1 + x2;
+            }
+            function update() {
+                // TODO: Custom input date parse here
+                var epoch = defaultEpoch;
+                var currentTime = new Date();
+                var millis = currentTime.getTime();
+
+                var millisSinceEpoch = millis - epoch.getTime();
+                var daysSinceEpoch = Math.trunc( millisSinceEpoch / 86400000 );
+
+                var marsDaysSinceEpoch = Math.trunc( millisSinceEpoch / 88775244 );
+                var marsTimeOfDay = millisSinceEpoch % 88775244;
+
+                $( ".epoch" ).text( epoch.toUTCString() );
+                $( ".utc-time" ).text( currentTime.toUTCString() );
+                $( ".millis" ).text(add_commas( millis ) );
+                $( ".days-since-epoch" ).text( daysSinceEpoch );
+                $( ".mars-days" ).text( marsDaysSinceEpoch );
+                $( ".mars-time" ).text( h_to_hms( marsTimeOfDay / 3600000 ) );
+            }
+            $(function() {
+                update();
+                setInterval(update, 20);
+            });
+        </script>
+    </body>
+</html>
+
+
