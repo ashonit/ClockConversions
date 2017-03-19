@@ -46,10 +46,6 @@
         </style>
     </head>
 
-    <script>
-        var defaultEpoch = new Date( "1/1/2017 10:30:00" );
-    </script>
-
     <body>
         <div class="container">
             <h1>Simple Mars Time</h1>
@@ -114,7 +110,7 @@
             }
             function update() {
                 // TODO: Custom input date parse here
-                var epoch = defaultEpoch;
+                var epoch = new Date( "1/1/2017 10:30:00" );
                 var currentTime = new Date();
                 var millis = currentTime.getTime();
 
