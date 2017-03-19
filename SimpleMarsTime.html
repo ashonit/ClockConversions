@@ -67,14 +67,19 @@
 
                 <div class="clock">
                     <h3>Days Since Epoch</h3>
-                    <span class="time days-since-epoch"></span>
+                    <span class="time earth-days-since-epoch"></span>
+                </div>
+
+                <div class="clock">
+                    <h3>Earth Time of Day</h3>
+                    <span class="time earth-time"></span>
                 </div>
 
                 <h2>Mars Time</h2>
 
                 <div class="clock">
                     <h3>Mars Days Since Epoch</h3>
-                    <div class="time mars-days"></div>
+                    <div class="time mars-days-since-epoch"></div>
                 </div>
 
                 <div class="clock">
@@ -116,6 +121,7 @@
 
                 var millisSinceEpoch = millis - epoch.getTime();
                 var daysSinceEpoch = Math.trunc( millisSinceEpoch / 86400000 );
+                var earthTimeOfDay = millisSinceEpoch % 86400000;
 
                 var marsDaysSinceEpoch = Math.trunc( millisSinceEpoch / 88775244 );
                 var marsTimeOfDay = millisSinceEpoch % 88775244;
@@ -123,8 +129,9 @@
                 $( ".epoch" ).text( epoch.toUTCString() );
                 $( ".current-time" ).text( currentTime.toUTCString() );
                 $( ".millis" ).text(add_commas( millis ) );
-                $( ".days-since-epoch" ).text( daysSinceEpoch );
-                $( ".mars-days" ).text( marsDaysSinceEpoch );
+                $( ".earth-days-since-epoch" ).text( daysSinceEpoch );
+                $( ".earth-time" ).text( h_to_hms( earthTimeOfDay / 3600000 ) );
+                $( ".mars-days-since-epoch" ).text( marsDaysSinceEpoch );
                 $( ".mars-time" ).text( h_to_hms( marsTimeOfDay / 3600000 ) );
             }
             $(function() {
