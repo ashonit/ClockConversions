@@ -63,7 +63,7 @@
                     Epoch: <span class="time epoch custom-datetime"></span>
                 </div>
                 <div>
-                    Current time: <span class="utc-time"></span>
+                    Current time: <span class="current-time"></span>
                 </div>
                 <div>
                     <i>millis</i> = <span class="millis"></span>
@@ -125,7 +125,7 @@
                 var marsTimeOfDay = millisSinceEpoch % 88775244;
 
                 $( ".epoch" ).text( epoch.toUTCString() );
-                $( ".utc-time" ).text( currentTime.toUTCString() );
+                $( ".current-time" ).text( currentTime.toUTCString() );
                 $( ".millis" ).text(add_commas( millis ) );
                 $( ".days-since-epoch" ).text( daysSinceEpoch );
                 $( ".mars-days" ).text( marsDaysSinceEpoch );
