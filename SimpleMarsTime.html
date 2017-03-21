@@ -62,7 +62,7 @@
                     Current time: <span class="current-time"></span>
                 </div>
                 <div>
-                    <i>millis</i> = <span class="millis"></span>
+                    <i>milliseconds</i> = <span class="currentTimeMillis"></span>
                 </div>
 
                 <div class="clock">
@@ -91,6 +91,8 @@
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
         <script src="jquery.min.js"></script>
         <script>
+            // A function that takes factional hours as a parameter and returns it in
+            // a human-readable hours:minutes:seconds format (hh:mm:ss)
             function h_to_hms(h) {
                 var x = h * 3600;
                 var hh = Math.floor(x / 3600);
@@ -102,6 +104,8 @@
                 if (ss < 10) ss = "0" + ss;
                 return hh + ":" + mm + ":" + ss;
             }
+            // A function that takes a number as a parameter and returns the same number
+            // but with commas every three digits.
             function add_commas(n) {
                 n += "";
                 var x = n.split(".");
@@ -114,27 +118,52 @@
                 return x1 + x2;
             }
             function update() {
-                // TODO: Custom input date parse here
-                var epoch = new Date( "1/1/2017 10:30:00" );
-                var currentTime = new Date();
-                var millis = currentTime.getTime();
+                // TODO: Custom input date parse here for the epoch.
 
-                var millisSinceEpoch = millis - epoch.getTime();
+                // Create the date/time to use as the epoch. In this case it is 10:30:00
+                // because the Date parsing assumes local time zone (eg Adelaide).
+                var epoch = new Date( "1/1/2017 10:30:00" );
+
+                // Extract the epoch as milliseconds, which is required for the calculations
+                // below because milliseconds are easier to compare than the JavaScript "Date"
+                // object.
+                var epochMillis = epoch.getTime();
+
+                // Get the current date/time from the system clock.
+                var currentTime = new Date();
+
+                // Extract the current time as milliseconds.
+                var currentTimeMillis = currentTime.getTime();
+
+                // Calculate the milliseconds difference between the epoch and now.
+                var millisSinceEpoch = currentTimeMillis - epoch.getTime();
+
+                // Earth calculations: use the length of a day on Earth (in milliseconds)
+                // to calculate the days since the epoch, and the number of hours in the
+                // current day.
                 var daysSinceEpoch = Math.trunc( millisSinceEpoch / 86400000 );
                 var earthTimeOfDay = millisSinceEpoch % 86400000;
 
+                // Mars calculations: same as Earth except now we use the Mars 
                 var marsDaysSinceEpoch = Math.trunc( millisSinceEpoch / 88775244 );
                 var marsTimeOfDay = millisSinceEpoch % 88775244;
 
+                // Update the fields in the web page with the calculated data.
                 $( ".epoch" ).text( epoch.toUTCString() );
                 $( ".current-time" ).text( currentTime.toUTCString() );
-                $( ".millis" ).text(add_commas( millis ) );
+                $( ".currentTimeMillis" ).text(add_commas( currentTimeMillis ) );
                 $( ".earth-days-since-epoch" ).text( daysSinceEpoch );
                 $( ".earth-time" ).text( h_to_hms( earthTimeOfDay / 3600000 ) );
                 $( ".mars-days-since-epoch" ).text( marsDaysSinceEpoch );
                 $( ".mars-time" ).text( h_to_hms( marsTimeOfDay / 3600000 ) );
             }
             $(function() {
+                // This function is the "first" thing invoked. It calls the update()
+                // function above, and then starts a timer that repeatedly calls update()
+                // every 20 milliseconds. This is how the web page keeps ticking over
+                // with new data. If you change the number 20 below to something else
+                // (say 1000 milliseconds -- equal to 1 second), the updates will be much
+                // slower.
                 update();
                 setInterval(update, 20);
             });
