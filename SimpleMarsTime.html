@@ -91,7 +91,7 @@
         <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
         <script src="jquery.min.js"></script>
         <script>
-            // A function that takes factional hours as a parameter and returns it in
+            // A function that takes fractional hours as a parameter and returns it in
             // a human-readable hours:minutes:seconds format (hh:mm:ss)
             function h_to_hms(h) {
                 var x = h * 3600;
@@ -136,7 +136,7 @@
                 var currentTimeMillis = currentTime.getTime();
 
                 // Calculate the milliseconds difference between the epoch and now.
-                var millisSinceEpoch = currentTimeMillis - epoch.getTime();
+                var millisSinceEpoch = currentTimeMillis - epochMillis;
 
                 // Earth calculations: use the length of a day on Earth (in milliseconds)
                 // to calculate the days since the epoch, and the number of hours in the
@@ -162,7 +162,8 @@
                 // function above, and then starts a timer that repeatedly calls update()
                 // every 20 milliseconds. This is how the web page keeps ticking over
                 // with new data. If you change the number 20 below to something else
-                // (say 1000 milliseconds -- equal to 1 second), the updates will be much
+                // the rate at which the screen updates will change. If changed to, say,
+                // 1000 milliseconds -- equal to 1 second -- the updates will be much
                 // slower.
                 update();
                 setInterval(update, 20);
